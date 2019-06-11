@@ -1,0 +1,130 @@
+---
+title: "The Correlation between Poverty and various Internet infrastructure indicators"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 6
+    toc_float: yes
+---
+
+
+# Purpose
+
+The purpose of this document is to generate a matrix of ratings and use them to build a generalized recommender system. In the future, these steps can be applied to anything from book ratings, to food ratings, to movies. 
+
+In this first cell, I generated 10000 ratings, made 3/8 of them NA, and coerced them into a matrix.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+ratings <- (sample(8, size = 10000, replace = TRUE))
+for (i in 6:8){
+ ratings[ratings==i] <- NA 
+}
+ratings <- as.data.frame(ratings)
+ratings
+
+df <- data.frame(matrix(unlist(ratings), nrow = 100, byrow=TRUE))
+df
+```
+
+In this cell, I split the data into test and train sets.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+set.seed(123)
+smp_size <- floor(.7 * length(df))
+
+library(dplyr)
+
+train <- as.data.frame(sample_frac(df, .7))
+idx   <- as.numeric(row.names(train)) 
+test  <- as.data.frame(df[-idx,])
+train$ratings
+test$ratings <- test$`ratings[-idx, ]`
+test$`ratings[-idx, ]` <- NULL
+
+test
+train
+```
+
+Here, I a found the total mean of this matrix to find the average rating across all items and users.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+values <- c()
+
+for (i in 1:nrow(train)){
+  for(j in 1:ncol(train)){
+    if(is.na(train[i,j]) == FALSE )
+      values <- c(values, train[i,j])
+  }
+
+}
+
+total.mean <- mean(values)
+total.mean
+
+```
+
+Next, I calculated the number of non-empty cells which then allowed me to calculate the root mean square error. I found that this naive model has a fairly large RMSE of .99 (out of 5). 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+df2 <- data.frame()
+for (i in 1:30){
+  for(j in 1:100){
+      df2[i,j] <- total.mean
+  }
+
+}
+
+counts <- colSums(!is.na(train))
+count  <- sum(counts)
+rmse1 <- (sum((df2 - test)**2, na.rm = TRUE)/count)**.5
+```
+
+
+Next, I created vectors of users and items from the data set. Next, I found the user and item biases in the training set before normalizing these terms by subtracting the total mean.
+```{r, eval=T, echo=T, warning=F, message=F}
+
+users <- colnames(train)
+items <- row.names(train)
+users.bias <- colMeans(train, na.rm=TRUE)
+items.bias <- rowMeans(train, na.rm=TRUE)
+
+users.bias <- users.bias - total.mean
+items.bias <- items.bias - total.mean
+```
+
+Then I calculated my new prediction matrix.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+df3 <- data.frame()
+for (i in 1:30){
+  for(j in 1:100){
+      df3[i,j] <- total.mean + users.bias[i] + items.bias[j]
+  }
+
+}
+
+df3
+```
+
+Finally, I used this prediction matrix measure the effect of the less naive model.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+df3 <- data.frame()
+for (i in 1:30){
+  for(j in 1:100){
+      df3[i,j] <- total.mean
+  }
+
+}
+
+counts <- colSums(!is.na(train))
+count  <- sum(counts)
+rmse2 <- (sum((df3 - test)**2, na.rm = TRUE)/count)**.5
+rmse2
+```
+
+We can see that this performs better than the naive model, but not by much. More data and a more nuanced approach are required.
