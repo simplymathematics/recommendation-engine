@@ -1,0 +1,76 @@
+---
+title: "Research Discussion 2"
+author: "simplymathematics"
+date: "6/21/2019"
+output: html_document
+---
+# Summary of Spotify's Recommendation System
+[Source](https://www.youtube.com/watch?v=3LBgiFch4_g)
+
+## Matrix Factorization
+
+### Explicit Matrix Factorization
+
+
+$$
+M = 
+\left(\begin{array}{cc} 
+M_{1,1} &  M_{1,2}\\
+M_{2,1} & M_{2,2}
+\end{array}\right)
+=
+\left(\begin{array}{cc} 
+L_{1,1} & L_{1,2}
+\end{array}\right)
+\cdot
+\left(\begin{array}{cc}
+R_{1,1} \\
+R_{2,1}
+\end{array}\right)
+$$ 
+Where the dimension of M is actually on the scale of billions. As such, they use dimensionality reduction to find the most important users or items, often in the form of [PCA](https://www.google.com/search?client=ubuntu&channel=fs&q=principal+component+analysis&ie=utf-8&oe=utf-8), but that is not explicitly stated in the video. What he does show is the loss function for an explicit recommendation system
+
+$$
+
+L = \sum_{u, i \in S} (r_{ui}- x^T_u \cdot y_i - \beta_u - \beta_i)^2 + \lambda_x \sum_u  || x_u ||^2 + \lambda_y \sum_u || y || ^2
+$$
+
+where r is the ratings matrix, x is the decomposed left handed eigenvector, and y is the right handed eigenvector, and the $\beta$ terms are the bias factors. Additionally, they added lambda terms to 'regularize' the function and avoid overfitting. Mathematically speaking, regularization scales the magnitudes of the x and y vectors since the number ratings are not inherently linear. The goal is to minimize this function through calculus or iteratize processes. 
+
+
+### Implicit Matrix Factorization
+
+Implicit factorization does the same things, but uses a slightly different term for ratings. The $p$ term below is a is abinary value, and the $c$ term is another scaling paramter. 
+
+$$
+
+L = \sum_{u, i \in S} c_{u,i}(p_{ui}- x^T_u \cdot y_i - \beta_u - \beta_i)^2 + \lambda_x \sum_u  || x_u ||^2 + \lambda_y \sum_u || y || ^2
+$$
+
+
+### Why Dimensionality Reduction?
+
+In the calculation below, using numbers from this [source](https://www.theverge.com/2019/4/29/18522297/spotify-100-million-users-apple-music-podcasting-free-users-advertising-voice-speakers, we see that we would need 6.6 million gigabytes of RAM to store a full matrix of the Spotify user data. That's orders of magnitude bigger than CUNY's largest [supercomputer](http://wiki.csi.cuny.edu/cunyhpc/index.php/Overview_of_the_CUNY_HPC_Center_resources#HPC_systems) that has a mere 768 Gigabytes of RAM.
+
+```{r}
+no.songs <- 30 * 10^6
+no.users <- 220 * 10^6
+
+matrix.size <- no.songs * no.users
+gigabyte = 10 ^9
+
+this.many.millions <- matrix.size / gigabyte / 10^6
+this.many.millions
+```
+By taking taking the top 1% of component vectors, we could vastly simplify the problem, requiring a mere 660 gigabytes of RAM to store the data. 
+```{r}
+no.songs <- 30 * 10^6 * .01
+no.users <- 220 * 10^6 * .01
+
+matrix.size <- no.songs * no.users
+gigabyte = 10 ^9
+
+this.many <- matrix.size / gigabyte
+this.many
+```
+Since that is far beyond the scale of most normal computers, Spark is a framework that allows you to orchestrate this data across many distributed the machines. The video mentioned they have 700 nodes, putting our estimation above within the right order of magnitude. Spotify uses Spark because it allows a developer to pull chunks of data from a massive matrix in a distributed system, allowing for faster and more efficient computations.
