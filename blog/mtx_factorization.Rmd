@@ -33,24 +33,22 @@ Where the dimension of M is actually on the scale of billions. As such, they use
 $$
 
 L = \sum_{u, i \in S} (r_{ui}- x^T_u \cdot y_i - \beta_u - \beta_i)^2 + \lambda_x \sum_u  || x_u ||^2 + \lambda_y \sum_u || y || ^2
+
 $$
 
-where r is the ratings matrix, x is the decomposed left handed eigenvector, and y is the right handed eigenvector, and the $\beta$ terms are the bias factors. Additionally, they added lambda terms to 'regularize' the function and avoid overfitting. Mathematically speaking, regularization scales the magnitudes of the x and y vectors since the number ratings are not inherently linear. The goal is to minimize this function through calculus or iteratize processes. 
+where r is the ratings matrix, x is the decomposed left handed singular vector, and y is the right handed singular ector, and the $\beta$ terms are the bias factors. Additionally, they added lambda terms to 'regularize' the function and avoid overfitting. Mathematically speaking, regularization scales the magnitudes of the x and y vectors since the number ratings are not inherently linear. The goal is to minimize this function through calculus or iteratize processes. 
 
 
 ### Implicit Matrix Factorization
 
 Implicit factorization does the same things, but uses a slightly different term for ratings. The $p$ term below is a is abinary value, and the $c$ term is another scaling paramter. 
 
-$$
-
-L = \sum_{u, i \in S} c_{u,i}(p_{ui}- x^T_u \cdot y_i - \beta_u - \beta_i)^2 + \lambda_x \sum_u  || x_u ||^2 + \lambda_y \sum_u || y || ^2
-$$
+$L = \sum_{u, i \in S} c_{u,i}(p_{ui}- x^T_u \cdot y_i - \beta_u - \beta_i)^2 + \lambda_x \sum_u  || x_u ||^2 + \lambda_y \sum_u || y || ^2$
 
 
 ### Why Dimensionality Reduction?
 
-In the calculation below, using numbers from this [source](https://www.theverge.com/2019/4/29/18522297/spotify-100-million-users-apple-music-podcasting-free-users-advertising-voice-speakers, we see that we would need 6.6 million gigabytes of RAM to store a full matrix of the Spotify user data. That's orders of magnitude bigger than CUNY's largest [supercomputer](http://wiki.csi.cuny.edu/cunyhpc/index.php/Overview_of_the_CUNY_HPC_Center_resources#HPC_systems) that has a mere 768 Gigabytes of RAM.
+In the calculation below, using numbers from this [source](https://www.theverge.com/2019/4/29/18522297/spotify-100-million-users-apple-music-podcasting-free-users-advertising-voice-speakers), we see that we would need 6.6 million gigabytes of RAM to store a full matrix of the Spotify user data. That's orders of magnitude bigger than CUNY's largest [supercomputer](http://wiki.csi.cuny.edu/cunyhpc/index.php/Overview_of_the_CUNY_HPC_Center_resources#HPC_systems) that has a mere 768 Gigabytes of RAM.
 
 ```{r}
 no.songs <- 30 * 10^6

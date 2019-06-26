@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+ratings <- (sample(10, size = 10000, replace = TRUE))
+
+df <- data.frame(matrix(unlist(ratings), nrow = 100, byrow=TRUE))
+for (i in 6:10){
+ df[df==i] <- NA 
+}
+users <- colnames(df)
+items <- row.names(df)
+users.bias <- c()
+items.bias <- c()
+for (i in 1:length(users)){
+  users.bias[i] <- mean(df[,i], na.rm=TRUE)
+}
+users.bias
+
+
+for (i in 1:length(items)){
+  items.bias[i] <- mean(df[i,], na.rm=TRUE)
+}
+items.bias
+```

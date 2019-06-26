@@ -405,18 +405,18 @@ R_{2,1}
 \end{array}\right)
 \]</span> Where the dimension of M is actually on the scale of billions. As such, they use dimensionality reduction to find the most important users or items, often in the form of <a href="https://www.google.com/search?client=ubuntu&amp;channel=fs&amp;q=principal+component+analysis&amp;ie=utf-8&amp;oe=utf-8">PCA</a>, but that is not explicitly stated in the video. What he does show is the loss function for an explicit recommendation system</p>
 <p>$$</p>
-<p>L = <em>{u, i S} (r</em>{ui}- x^T_u y_i - _u - _i)^2 + _x _u || x_u ||^2 + _y _u || y || ^2 $$</p>
-<p>where r is the ratings matrix, x is the decomposed left handed eigenvector, and y is the right handed eigenvector, and the <span class="math inline">\(\beta\)</span> terms are the bias factors. Additionally, they added lambda terms to ‘regularize’ the function and avoid overfitting. Mathematically speaking, regularization scales the magnitudes of the x and y vectors since the number ratings are not inherently linear. The goal is to minimize this function through calculus or iteratize processes.</p>
+<p>L = <em>{u, i S} (r</em>{ui}- x^T_u y_i - _u - _i)^2 + _x _u || x_u ||^2 + _y _u || y || ^2</p>
+<p>$$</p>
+<p>where r is the ratings matrix, x is the decomposed left handed singular vector, and y is the right handed singular ector, and the <span class="math inline">\(\beta\)</span> terms are the bias factors. Additionally, they added lambda terms to ‘regularize’ the function and avoid overfitting. Mathematically speaking, regularization scales the magnitudes of the x and y vectors since the number ratings are not inherently linear. The goal is to minimize this function through calculus or iteratize processes.</p>
 </div>
 <div id="implicit-matrix-factorization" class="section level3">
 <h3>Implicit Matrix Factorization</h3>
 <p>Implicit factorization does the same things, but uses a slightly different term for ratings. The <span class="math inline">\(p\)</span> term below is a is abinary value, and the <span class="math inline">\(c\)</span> term is another scaling paramter.</p>
-<p>$$</p>
-<p>L = <em>{u, i S} c</em>{u,i}(p_{ui}- x^T_u y_i - _u - _i)^2 + _x _u || x_u ||^2 + _y _u || y || ^2 $$</p>
+<p><span class="math inline">\(L = \sum_{u, i \in S} c_{u,i}(p_{ui}- x^T_u \cdot y_i - \beta_u - \beta_i)^2 + \lambda_x \sum_u || x_u ||^2 + \lambda_y \sum_u || y || ^2\)</span></p>
 </div>
 <div id="why-dimensionality-reduction" class="section level3">
 <h3>Why Dimensionality Reduction?</h3>
-<p>In the calculation below, using numbers from this [source](<a href="https://www.theverge.com/2019/4/29/18522297/spotify-100-million-users-apple-music-podcasting-free-users-advertising-voice-speakers" class="uri">https://www.theverge.com/2019/4/29/18522297/spotify-100-million-users-apple-music-podcasting-free-users-advertising-voice-speakers</a>, we see that we would need 6.6 million gigabytes of RAM to store a full matrix of the Spotify user data. That’s orders of magnitude bigger than CUNY’s largest <a href="http://wiki.csi.cuny.edu/cunyhpc/index.php/Overview_of_the_CUNY_HPC_Center_resources#HPC_systems">supercomputer</a> that has a mere 768 Gigabytes of RAM.</p>
+<p>In the calculation below, using numbers from this <a href="https://www.theverge.com/2019/4/29/18522297/spotify-100-million-users-apple-music-podcasting-free-users-advertising-voice-speakers">source</a>, we see that we would need 6.6 million gigabytes of RAM to store a full matrix of the Spotify user data. That’s orders of magnitude bigger than CUNY’s largest <a href="http://wiki.csi.cuny.edu/cunyhpc/index.php/Overview_of_the_CUNY_HPC_Center_resources#HPC_systems">supercomputer</a> that has a mere 768 Gigabytes of RAM.</p>
 <pre class="r"><code>no.songs &lt;- 30 * 10^6
 no.users &lt;- 220 * 10^6
 

@@ -1,0 +1,178 @@
+---
+title: "Item/User Based Collaborative Filtering using Recommender Lab"
+output: 
+  html_notebook:
+    code_folding: hide
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 6
+    toc_float: yes
+---
+
+
+
+# Data
+First of all, we need data. Luckily, the `recommenderLab` package contains the MovieLense set which has 10s of thousands of ratings across hundreds of users. Below, we can see the top 5 movies for the first user listed. 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+library(recommenderlab)
+
+data("MovieLense")
+
+head(as(MovieLense[1,], "list")[[1]])
+
+
+```
+
+Additionally, we can visualize this matrix by plotting the items on the x-axis, the users on the y-axis and assigning a color value to the rating. As we can see, this is a very sparse matrix, meaning that most users did not rate most things. 
+
+
+## Matrix Visualization
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+mtx <- MovieLense
+
+image(mtx)
+```
+
+In fact, we can examine this closer. Below, we look at the histograms of row and column counts. We can see the [long tail](http://infolab.stanford.edu/~ullman/mmds/ch9.pdf) that's discussed in the link course text.
+
+## Rating Distribution
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+hist(rowCounts(mtx))
+
+hist(colCounts(mtx))
+
+```
+
+Below, we see that the mean rating is 3.6. This means that the average movie is better than the 2.5 we would expect. Either these viewers are optimistic or they tend to watch movies that they think they will enjoy.
+
+## Average Rating
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+
+mean(rowMeans(mtx))
+```
+
+## Test/Train Split
+
+
+Next, I split the data into test and train sets using the above mentioned package. I used a split of 70% training and 30% testing in an attempt to minimize overfitting but still have reliable prediction measurements. 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+set.seed(1)
+idx <- evaluationScheme(mtx, method = "split", train = .7, k = 1, given = 15)
+idx
+```
+
+
+# User-based collaborative Filtering
+
+## Cosine Similarity
+User-based collaborative filtering relies on the assumptions that different people have similar tastes. That is, if Alice and Bob like a large proportion of the same movies, then Bob and Alice's scores are more likely to be the same on movies one or the other hasn't seen (but the other has). The main disadvantage of this is the huge amount of data required to find each 'type' of user. 
+
+The first model I built uses cosine similarity which measures the angles between two vectors. Two orthogonal vectors will have a score of 0 (because they are unrelated) and two parallel vectors will have a score of 1 (because they are effectively the same). This technique comes from the dot product but excludes the magnitude term because that's largely dependent on the number of ratings (which varies between users). 
+
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model1 <- Recommender(getData(idx, "train"), method = "UBCF", 
+                     parameter = list(method = "cosine"))
+recommendations1 <- predict(model1, getData(idx, "known"), type = "ratings")
+pred1 <- calcPredictionAccuracy(recommendations1, getData(idx, "unknown"))
+```
+
+## Pearson Similarity
+
+Model two uses the [Pearson correlation coefficient](https://pdfs.semanticscholar.org/1453/171acb23daae8e4075dc741dc21c6ad89800.pdf), which is defined as 
+
+$$
+
+r = \frac {\sum_{i=1}^n(x_i-\bar{x})(y_i - \bar{y})}{(\sum_{i=1}^n(x_i-\bar{x})^2)^{1/2}(\sum_{i=1}^n(y_i-\bar{y})^2)^{1/2}}
+
+$$
+
+which is also the covariance of the variables divided by the product of their standard deviations.  
+
+
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model2 <- Recommender(getData(idx, "train"), method = "UBCF", 
+                     parameter = list(method = "Pearson"))
+recommendations2 <- predict(model2, getData(idx, "known"), type = "ratings")
+pred2 <- calcPredictionAccuracy(recommendations2, getData(idx, "unknown"))
+```
+
+## Jaccard Similarity
+
+The third model we evaluate for UBCF uses Jaccard similarity. It's a measure of the intersection of two users divided by their union. It's defined mathematically as 
+
+$$
+
+\frac{|A \cap B|}{|A \cup B |} = \frac{|A \text{ AND } B|}{|A \text{ OR } B |}
+
+$$
+which means it is always positive and also varies between 0 and 1. This score is penalized by having differently sized vectors and differing movies between the two users. 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model3 <- Recommender(getData(idx, "train"), method = "UBCF", 
+                     parameter = list(method = "jaccard"))
+recommendations3 <- predict(model3, getData(idx, "known"), type = "ratings")
+pred3 <- calcPredictionAccuracy(recommendations3, getData(idx, "unknown"))
+```
+
+# Item based collaborative filtering
+
+Like user-based filtering, we use the similarities between items to find new items that a user might like. Similar to the above process, we test each similarity method with our data, in the same order. 
+
+
+## Cosine Similarity
+
+In this section, I build a model that users item-based collaborative filtering with cosine similarity. 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model4 <- Recommender(getData(idx, "train"), method = "IBCF", 
+                     parameter = list(method = "cosine"))
+recommendations4 <- predict(model4, getData(idx, "known"), type = "ratings")
+pred4 <- calcPredictionAccuracy(recommendations4, getData(idx, "unknown"))
+```
+
+## Pearson Similarity
+
+In this section, I build a model that users item-based collaborative filtering with Pearson similarity. 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model5 <- Recommender(getData(idx, "train"), method = "IBCF", 
+                     parameter = list(method = "Pearson"))
+recommendations5 <- predict(model5, getData(idx, "known"), type = "ratings")
+pred5 <- calcPredictionAccuracy(recommendations5, getData(idx, "unknown"))
+```
+
+## Jaccard Similarity
+
+In this section, I build a model that users item-based collaborative filtering with Jaccard similarity. 
+
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model6 <- Recommender(getData(idx, "train"), method = "IBCF", 
+                     parameter = list(method = "jaccard"))
+recommendations6 <- predict(model6, getData(idx, "known"), type = "ratings")
+pred6 <- calcPredictionAccuracy(recommendations6, getData(idx, "unknown"))
+```
+
+
+# Conclusion
+
+```{r}
+preds <- rbind(pred1, pred2, pred3, pred4, pred5, pred6)
+preds <- as.data.frame(preds)
+row.names(preds) <- c("UBCF cosine", "UBCF Pearson", "UBCF Jaccard", "IBCF cosine", "IBCF Pearson", "IBCF Jaccard")
+preds
+```
+
+As we can see from the above chart, the user-based content filtering performs better than the item-based one across all similarity measures. Additionally, UBCF has a mean square error of around 1.15 meaning it is consistently within 1 star of the 'real' rating. The item-based methods using cosine or Pearson similarity can only get within 2 stars and are effectively useless. However, Jaccard similarity performs about as well across both item-based and user-based filtering. Perhaps this is because certain items have many more ratings than even the most prolific users leading to a better metric. Alternatively, we could be seeing an artifact of genre-specific movie bias in which users cluster around a particular genre even if their rating biases differ. Either way, these models perform about as well as the bias-based techniques denoted in project 1. 

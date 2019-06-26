@@ -1,0 +1,153 @@
+---
+title: "Item/User Based Collaborative Filtering using Recommender Lab"
+output: 
+  html_notebook:
+    code_folding: hide
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 6
+    toc_float: yes
+---
+
+
+
+# Data
+First of all, we need data. Luckily, the `recommenderLab` package contains the MovieLense set which has 10s of thousands of ratings across hundreds of users. Below, we can see the top 5 movies for the first user listed. 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+library(recommenderlab)
+
+data("MovieLense")
+
+head(as(MovieLense[1,], "list")[[1]])
+
+
+```
+
+Additionally, we can visualize this matrix by plotting the items on the x-axis, the users on the y-axis and assigning a color value to the rating. As we can see, this is a very sparse matrix, meaning that most users did not rate most things. 
+
+
+## Matrix Visualization
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+mtx <- MovieLense
+
+image(mtx)
+```
+
+In fact, we can examine this closer. Below, we look at the histograms of row and column counts. We can see the [long tail](http://infolab.stanford.edu/~ullman/mmds/ch9.pdf) that's discussed in the link course text.
+
+## Rating Distribution
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+hist(rowCounts(mtx))
+
+hist(colCounts(mtx))
+
+```
+
+Below, we see that the mean rating is 3.6. This means that the average movie is better than the 2.5 we would expect. Either these viewers are optimistic or they tend to watch movies that they think they will enjoy.
+
+## Test/Train Split
+
+
+Next, I split the data into test and train sets using the above mentioned package. I used a split of 70% training and 30% testing in an attempt to minimize overfitting but still have reliable prediction measurements. 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+set.seed(1)
+idx <- evaluationScheme(mtx, method = "split", train = .7, k = 1, given = 15)
+idx
+```
+
+
+## SVD with column mean imputation
+
+Standard vector decomposition assumes that we have and $ m X n $ matrix from a set of real or complex numbers. Necessarily, there are three matrices such that
+
+$$
+X = U \Sigma V^T
+$$
+such that $U$ is an $n X n$ matrix, known as the left singular vectors, $\Sigma$ are the singular values of X, and $W$ describes the right singular vectors and is $m X m $. If we assume that our values are real and not complex, it therefore follows that
+
+$$
+X^TX = W \Sigma ^T U^T \cdot U \Sigma W^T \rightarrow \\
+X^TX = W \Sigma ^T \Sigma W^T
+$$
+and because $\Sigma$ is a diagonal matrix ($ \Sigma^T = \Sigma$), then it follows that 
+
+$$
+
+X^TX = W \Sigma ^2 W^T
+
+$$
+Conversely, we can perform the left hand multiplication the other way to see that
+
+$$
+XX^T = U  \Sigma ^2 U^T
+$$
+That is to say, that columns of U (right singular viectors) are eigenvectors of $XX^T$ and the columns of W (left singular vectors) are the eigenvectors for $X^TX$. We can quickly calculate the $U$ matrix using
+$$
+V = X^T U \lambda^{-1} \\
+U = XV\lambda^{-1}
+$$
+
+
+
+Because of the matrix multiplication steps, this method does not work if there are any missing data points, because it's impossible to multiply a number by 'NA'. Therefore, we must impute these missing values. The default implementation in recommenderLab replaces the null values with the mean of the column they are in (i.e. the user's mean rating). 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model1 <- Recommender(getData(idx, "train"), method="SVD")
+recommendations1 <- predict(model1, getData(idx, "known"), type = "ratings")
+pred1 <- calcPredictionAccuracy(recommendations1, getData(idx, "unknown"))
+```
+
+## Funk SVD
+
+Funk SVD, however, uses stochastic gradient descent to fill in these gaps . That is to say
+
+$$
+R^* = pq 
+$$
+
+where $R^*$ is the computed rating, $p$ is the user latent factors and $q$ is the item latent factor vector. These latent factors can be thought of as a set up basis vectors that can approximate the $R*$ space. By minimizing the function
+
+$$
+f(p,q) = \sum_{r_{ui}} (r_{ui} - p_u \cdot q_i)^2
+$$
+we can find these latent factors. This is a non-trivial process, so the next chunk of code could take some time to evaluate. 
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model2 <- Recommender(getData(idx, "train"), method="SVDF")
+recommendations2 <- predict(model2, getData(idx, "known"), type = "ratings")
+pred2 <- calcPredictionAccuracy(recommendations2, getData(idx, "unknown"))
+```
+
+According to [Stanford](http://stanford.edu/~rezab/classes/cme323/S15/notes/lec14.pdf) the alternating least squares model can be written as 
+
+$$
+f(p,q) = \sum_{r_{ui}} (r_{ui} - x^T_uy_i) + \lambda \sum_u || x_u ||^2 + \lambda \sum_i ||y_i||^2
+$$
+where the x and y are latent factor matrices and approximate the complete ratings matrix and lambda is a learning factor applied to errors associated with the approximated vectors. 
+
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model3 <- Recommender(getData(idx, "train"), method="ALS")
+recommendations3 <- predict(model3, getData(idx, "known"), type = "ratings")
+pred3 <- calcPredictionAccuracy(recommendations3, getData(idx, "unknown"))
+```
+
+
+# Conclusion
+
+```{r, eval=T, echo=T, warning=F, message=F}
+preds <- rbind(pred1, pred2, pred3)
+preds <- as.data.frame(preds)
+row.names(preds) <- c("SVD", "Funk", "ALS")
+preds
+```
+
+As we can see from the above chart, Funk's algorithm consistently out-performed the regular SVD decomposition since it necessarily introduces errors with the $X^XT$ calculation. Parameter tuning would likely help ALS achieve better performance than Funk, but we may be seeing overfitting in the Funk algorithm instead.

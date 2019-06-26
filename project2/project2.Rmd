@@ -19,6 +19,7 @@ First of all, we need data. Luckily, the `recommenderLab` package contains the M
 
 library(recommenderlab)
 
+data("MovieLense")
 
 head(as(MovieLense[1,], "list")[[1]])
 
