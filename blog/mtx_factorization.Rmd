@@ -50,7 +50,7 @@ $L = \sum_{u, i \in S} c_{u,i}(p_{ui}- x^T_u \cdot y_i - \beta_u - \beta_i)^2 + 
 
 In the calculation below, using numbers from this [source](https://www.theverge.com/2019/4/29/18522297/spotify-100-million-users-apple-music-podcasting-free-users-advertising-voice-speakers), we see that we would need 6.6 million gigabytes of RAM to store a full matrix of the Spotify user data. That's orders of magnitude bigger than CUNY's largest [supercomputer](http://wiki.csi.cuny.edu/cunyhpc/index.php/Overview_of_the_CUNY_HPC_Center_resources#HPC_systems) that has a mere 768 Gigabytes of RAM.
 
-```{r}
+```{r, echo = F}
 no.songs <- 30 * 10^6
 no.users <- 220 * 10^6
 
@@ -61,7 +61,7 @@ this.many.millions <- matrix.size / gigabyte / 10^6
 this.many.millions
 ```
 By taking taking the top 1% of component vectors, we could vastly simplify the problem, requiring a mere 660 gigabytes of RAM to store the data. 
-```{r}
+```{r, echo = F}
 no.songs <- 30 * 10^6 * .01
 no.users <- 220 * 10^6 * .01
 

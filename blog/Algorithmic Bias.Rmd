@@ -1,0 +1,25 @@
+---
+title: "Algorithmic Bias"
+author: "simplymathematics"
+date: "6/29/2019"
+output: html_document
+---
+
+
+# Algorithmic Bias
+
+It is well-documented that machine learning is both racist and sexist. [Amazon's facial recognition platforms](https://time.com/5520558/artificial-intelligence-racial-gender-bias/) believes Oprah Winfrey (and many other black women) to be men. Search algorithms perpetuate racial biases that leads to results like, when one searches for two different phrases online
+> Try typing “Asian girls” into the Google search bar. If your results are like mine, you’ll see a selection of come-ons to view sexy pictures, advice for “white men” on how to pick up Asian girls and some items unprintable in this publication. Try “Caucasian girls” and you’ll get wonky definitions of “Caucasian,” pointers to stock photos of wholesome women and kids, and some anodyne dating advice
+
+This trend continues when searching for 'black girls,' a term that brings up sexually explicit images, blogs, and videos. 
+
+This type of bias is also not new: 
+> Algorithmic bias isn’t new. In the 1970s and 1980s, St. George’s Hospital Medical School in the United Kingdom used a computer program to do initial screening of applicants. The program, which mimicked the choices admission staff had made in the past, denied interviews to as many as 60 applicants because they were women or had non-European sounding names. 
+[Source](https://muse.jhu.edu/article/645268/pdf)
+
+[Facebook is currently being sued](https://www.politico.com/story/2019/03/28/hud-charges-facebook-with-housing-discrimination-1241406) by the Department of Housing and Urban development because of methods and practices that lead to housing discrimination.
+
+Lucikly, people are noticing this. The City of New York has an algorithms task force
+
+
+and Congressional Democrats have [proposed a bill](https://www.nytimes.com/2019/05/07/opinion/tech-racism-algorithms.html) to regulate algorithmic bil
