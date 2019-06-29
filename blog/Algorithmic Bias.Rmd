@@ -21,7 +21,6 @@ This type of bias is also not new:
 
 [Facebook is currently being sued](https://www.politico.com/story/2019/03/28/hud-charges-facebook-with-housing-discrimination-1241406) by the Department of Housing and Urban development because of methods and practices that lead to housing discrimination, not on purpose, of course.
 
-> 
 
 [In another article](https://www.wired.com/story/the-real-reason-tech-struggles-with-algorithmic-bias/) written by a former intelligence office, he describes is his time at Facebook as " " and says
 > These are mistakes made while trying to do the right thing. But they demonstrate why tasking untrained engineers and data scientists with correcting bias is, at the broader level, naïve, and at a leadership level insincere.
