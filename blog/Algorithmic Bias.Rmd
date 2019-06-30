@@ -10,7 +10,7 @@ output: html_document
 
 It is well-documented that machine learning is both racist and sexist -- if only on accident. [Amazon's facial recognition platforms](https://time.com/5520558/artificial-intelligence-racial-gender-bias/) believes Oprah Winfrey (and many other black women) to be men. Search algorithms perpetuate racial biases that leads to results like, when [one searches for two different phrases online](https://www.washingtonpost.com/gdpr-consent/?destination=%2fopinions%2f2018%2f12%2f17%2fwhy-your-ai-might-be-racist%2f%3f&utm_term=.7b7d1505f6e3):
 
-> Try typing “Asian girls” into the Google search bar. If your results are like mine, you’ll see a selection of come-ons to view sexy pictures, advice for “white men” on how to pick up Asian girls and some items unprintable in this publication. Try “Caucasian girls” and you’ll get wonky definitions of “Caucasian,” pointers to stock photos of wholesome women and kids, and some anodyne dating advice
+> Try typing “Asian girls” into the Google search bar. If your results are like mine, you’ll see a selection of come-ons to view sexy pictures, advice for “white men” on how to pick up Asian girls and some items unprintable in this publication. Try “Caucasian girls” and you’ll get wonky definitions of “Caucasian,” pointers to stock photos of wholesome women and kids, and some anodyne dating advice.
 
 This trend continues when searching for 'black girls,' a term that brings up sexually explicit images, blogs, and videos. 
 
@@ -36,22 +36,22 @@ The author goes on to say:
 
 If we don't take positive, active steps to combat this human tendency, it will translate any product that we try to build. [The Brookings Institute](https://www.brookings.edu/research/algorithmic-bias-detection-and-mitigation-best-practices-and-policies-to-reduce-consumer-harms/) catalogued instance of Algorithmic Bias
 
-1. Bias in word associations:
+* Bias in word associations:
 
 > They found that European names were perceived as more pleasant than those of African-Americans, and that the words “woman” and “girl” were more likely to be associated with the arts instead of science and math, which were most likely connected to males. In analyzing these word-associations in the training data, the machine learning algorithm picked up on existing racial and gender biases shown by humans. 
 
-2. Bias in online ads
+* Bias in online ads
 
 > Latanya Sweeney, Harvard researcher and former chief technology officer at the Federal Trade Commission (FTC), found that online search queries for African-American names were more likely to return ads to that person from a service that renders arrest records, as compared to the ad results for white names.
 
-3. Bias in criminal justice algorithms
+* Bias in criminal justice algorithms
 
 > The COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) algorithm, which is used by judges to predict whether defendants should be detained or released on bail pending trial, was found to be biased against African-Americans, according to a report from ProPublica.
 
 
 And finally, which is probably most relevant to autonomous vehicles:
 
-4. Bias in facial recognition technology 
+* Bias in facial recognition technology 
 
 > MIT researcher Joy Buolamwini found that the algorithms powering three commercially available facial recognition software systems were failing to recognize darker-skinned complexions. Generally, most facial recognition training data sets are estimated to be more than 75 percent male and more than 80 percent white. When the person in the photo was a white man, the software was accurate 99 percent of the time at identifying the person as male. According to Buolamwini’s research, the product error rates for the three products were less than one percent overall, but increased to more than 20 percent in one product and 34 percent in the other two in the identification of darker-skinned women as female.
 
@@ -82,7 +82,7 @@ It's wrong to assert that this problem is one that can be solved by computers. T
 
 > Results showed that participants in the control condition exhibited ingroup bias, displaying faster response times for judging good words after being exposed to “us” and faster response times for bad words after being exposed to “them.” Participants in the empathy viewing condition, however, did not show this bias. These results suggest that inducing empathy is a particularly robust form of prejudice reduction, one that not only improves explicit intergroup attitudes but also implicit attitudes.
 
-What's clear is that 1) emotions are real and human. 2) Bias is the result of natural neurological processes 3) Implicit bias seeps into our technology and causes harm 4) This problem can be solved by exposure to diverse groups, facilitated discussions and trainings on bias literacy, and acting with empathy.
+What's clear is that  emotions are real and human. Bias is the result of natural neurological processes.  Implicit bias seeps into our technology and causes harm. This problem can be solved by exposure to diverse groups, facilitated discussion, trainings on bias literacy, and acting with empathy.
 
 
 
