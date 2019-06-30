@@ -9,11 +9,13 @@ output: html_document
 # Algorithmic Bias
 
 It is well-documented that machine learning is both racist and sexist -- if only on accident. [Amazon's facial recognition platforms](https://time.com/5520558/artificial-intelligence-racial-gender-bias/) believes Oprah Winfrey (and many other black women) to be men. Search algorithms perpetuate racial biases that leads to results like, when one searches for two different phrases online
+
 > Try typing “Asian girls” into the Google search bar. If your results are like mine, you’ll see a selection of come-ons to view sexy pictures, advice for “white men” on how to pick up Asian girls and some items unprintable in this publication. Try “Caucasian girls” and you’ll get wonky definitions of “Caucasian,” pointers to stock photos of wholesome women and kids, and some anodyne dating advice
 
 This trend continues when searching for 'black girls,' a term that brings up sexually explicit images, blogs, and videos. 
 
 This type of bias is also not new: 
+
 > Algorithmic bias isn’t new. In the 1970s and 1980s, St. George’s Hospital Medical School in the United Kingdom used a computer program to do initial screening of applicants. The program, which mimicked the choices admission staff had made in the past, denied interviews to as many as 60 applicants because they were women or had non-European sounding names. 
 [Source](https://muse.jhu.edu/article/645268/pdf)
 
@@ -23,6 +25,7 @@ This type of bias is also not new:
 
 
 [In another article](https://www.wired.com/story/the-real-reason-tech-struggles-with-algorithmic-bias/) written by a former intelligence office, he describes is his time at Facebook as " " and says
+
 > These are mistakes made while trying to do the right thing. But they demonstrate why tasking untrained engineers and data scientists with correcting bias is, at the broader level, naïve, and at a leadership level insincere.
 
 > I believe that many of my former coworkers at Facebook fundamentally want to make the world a better place. I have no doubt that they feel they are building products that have been tested and analyzed to ensure they are not perpetuating the nastiest biases. But the company has created its own sort of insular bubble in which its employees' perception of the world is the product of a number of biases that are engrained within the Silicon Valley tech and innovation scene.
