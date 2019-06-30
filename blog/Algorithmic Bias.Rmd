@@ -56,7 +56,7 @@ And finally, which is probably most relevant to autonomous vehicles:
 
 The same Brookings Institute link says that: 
 
-> The European Union recently released “Ethics Guidelines for Trustworthy AI,” which delineates seven governance principles: (1) human agency and oversight, (2) technical robustness and safety, (3) privacy and data governance, (4) transparency, (5) diversity, nondiscrimination and fairness, (6) environmental and societal well-being, and (7) accountability.[39] The EU’s ethical framework reflects a clear consensus that it is unethical to “unfairly discriminate.” Within these guidelines, member states link diversity and nondiscrimination with principles of fairness, enabling inclusion and diversity throughout the entire AI system’s lifecycle. Their principles interpret fairness through the lenses of equal access, inclusive design processes, and equal treatment.
+> The European Union recently released “Ethics Guidelines for Trustworthy AI,” which delineates seven governance principles: (1) human agency and oversight, (2) technical robustness and safety, (3) privacy and data governance, (4) transparency, (5) diversity, nondiscrimination and fairness, (6) environmental and societal well-being, and (7) accountability. The EU’s ethical framework reflects a clear consensus that it is unethical to “unfairly discriminate.” Within these guidelines, member states link diversity and nondiscrimination with principles of fairness, enabling inclusion and diversity throughout the entire AI system’s lifecycle. Their principles interpret fairness through the lenses of equal access, inclusive design processes, and equal treatment.
 
 It's good that at least some guidelines exist.
 
