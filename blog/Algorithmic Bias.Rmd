@@ -17,7 +17,7 @@ This type of bias is also not new:
 > Algorithmic bias isn’t new. In the 1970s and 1980s, St. George’s Hospital Medical School in the United Kingdom used a computer program to do initial screening of applicants. The program, which mimicked the choices admission staff had made in the past, denied interviews to as many as 60 applicants because they were women or had non-European sounding names. 
 [Source](https://muse.jhu.edu/article/645268/pdf)
 
-
+[Amazon had a Recruitment Tool](https://www.reuters.com/article/us-amazon-com-jobs-automation-insight/amazon-scraps-secret-ai-recruiting-tool-that-showed-bias-against-women-idUSKCN1MK08G) that showed bias against women
 
 [Facebook is currently being sued](https://www.politico.com/story/2019/03/28/hud-charges-facebook-with-housing-discrimination-1241406) by the Department of Housing and Urban development because of methods and practices that lead to housing discrimination, not on purpose, of course.
 
@@ -46,7 +46,7 @@ And finally, which is probably most relevant to autonomous vehicles:
 
 4. Bias in facial recognition technology 
 
-> MIT researcher Joy Buolamwini found that the algorithms powering three commercially available facial recognition software systems were failing to recognize darker-skinned complexions.[15] Generally, most facial recognition training data sets are estimated to be more than 75 percent male and more than 80 percent white. When the person in the photo was a white man, the software was accurate 99 percent of the time at identifying the person as male. According to Buolamwini’s research, the product error rates for the three products were less than one percent overall, but increased to more than 20 percent in one product and 34 percent in the other two in the identification of darker-skinned women as female.
+> MIT researcher Joy Buolamwini found that the algorithms powering three commercially available facial recognition software systems were failing to recognize darker-skinned complexions. Generally, most facial recognition training data sets are estimated to be more than 75 percent male and more than 80 percent white. When the person in the photo was a white man, the software was accurate 99 percent of the time at identifying the person as male. According to Buolamwini’s research, the product error rates for the three products were less than one percent overall, but increased to more than 20 percent in one product and 34 percent in the other two in the identification of darker-skinned women as female.
 
 
 [Here is](https://arxiv.org/pdf/1902.11097.pdf) a study from Georgia Tech about 5 other ways racial bias seeps into facial regonition systems: 
@@ -55,5 +55,30 @@ And finally, which is probably most relevant to autonomous vehicles:
 The same Brookings Institute link says that: 
 
 > The European Union recently released “Ethics Guidelines for Trustworthy AI,” which delineates seven governance principles: (1) human agency and oversight, (2) technical robustness and safety, (3) privacy and data governance, (4) transparency, (5) diversity, nondiscrimination and fairness, (6) environmental and societal well-being, and (7) accountability.[39] The EU’s ethical framework reflects a clear consensus that it is unethical to “unfairly discriminate.” Within these guidelines, member states link diversity and nondiscrimination with principles of fairness, enabling inclusion and diversity throughout the entire AI system’s lifecycle. Their principles interpret fairness through the lenses of equal access, inclusive design processes, and equal treatment.
+
+It's good that at least some guidelines exist.
+
+Even though Jon Kleinberg from Cornell University pointed out “[a]n algorithm has no choice but to be premeditated,” there are ways to combat these tendencies. Brookings (again) says that
+
+>  In the mitigation of bias and the management of the risks associated with the algorithm, collaborative work teams can compensate for the blind-spots often missed in smaller, segmented conversations and reviews. Bringing together experts from various departments, disciplines, and sectors will help facilitate accountability standards and strategies for mitigating online biases, including from engineering, legal, marketing, strategy, and communications.
+
+Here we're talking about all of the algorithms involved in a company-- from production design, to execution, and the very employees that make up the company. 
+It's wrong to assert that this problem is one that can be solved by computers. This bias is ours to own and ours to address.
+
+[The Univesity of California San Francisco] says that(https://diversity.ucsf.edu/resources/strategies-address-unconscious-bias): 
+
+1. Promote self-awareness and regonize the biases we all have
+2. Since categorization gives rise to implicit biases naturally in huamns, it is important to aprroach these problems in a an open way
+3. Exposure to people of different backgrounds is important, but
+4. Facilitated discussions and training sessions on bias literacy had the greatest effect.
+
+[In One Study](https://psycnet.apa.org/record/2012-23868-001) Researchers found that inducing empathy toward an Asian American charater reduced explicit prejudice towards Asian Americans.
+
+> Results showed that participants in the control condition exhibited ingroup bias, displaying faster RTs for judging good words after being exposed to “us” and faster RTs for bad words after being exposed to “them.” Participants in the empathy viewing condition, however, did not show this bias. These results suggest that inducing empathy is a particularly robust form of prejudice reduction, one that not only improves explicit intergroup attitudes but also implicit attitudes.
+
+
+
+
+
 
 
