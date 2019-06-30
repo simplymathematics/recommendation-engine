@@ -78,7 +78,7 @@ It's wrong to assert that this problem is one that can be solved by computers. T
 
 > Results showed that participants in the control condition exhibited ingroup bias, displaying faster response times for judging good words after being exposed to “us” and faster response times for bad words after being exposed to “them.” Participants in the empathy viewing condition, however, did not show this bias. These results suggest that inducing empathy is a particularly robust form of prejudice reduction, one that not only improves explicit intergroup attitudes but also implicit attitudes.
 
-
+What's clear is that 1) emotions are real and human. 2) Bias is the result of natural neurological processes 3) Implicit bias seeps into our technology and causes harm 4) This problem can be solved by exposure to diverse groups, facilitated discussions and trainings on bias literacy, and acting with empathy.
 
 
 
