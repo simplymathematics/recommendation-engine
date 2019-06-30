@@ -37,9 +37,11 @@ The author goes on to say:
 If we don't take positive, active steps to combat this human tendency, it will translate any product that we try to build. [The Brookings Institute](https://www.brookings.edu/research/algorithmic-bias-detection-and-mitigation-best-practices-and-policies-to-reduce-consumer-harms/) catalogued instance of Algorithmic Bias
 
 1. Bias in word associations:
+
 > They found that European names were perceived as more pleasant than those of African-Americans, and that the words “woman” and “girl” were more likely to be associated with the arts instead of science and math, which were most likely connected to males. In analyzing these word-associations in the training data, the machine learning algorithm picked up on existing racial and gender biases shown by humans. 
 
 2. Bias in online ads
+
 > Latanya Sweeney, Harvard researcher and former chief technology officer at the Federal Trade Commission (FTC), found that online search queries for African-American names were more likely to return ads to that person from a service that renders arrest records, as compared to the ad results for white names.
 
 3. Bias in criminal justice algorithms
