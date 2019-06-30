@@ -52,8 +52,7 @@ And finally, which is probably most relevant to autonomous vehicles:
 > MIT researcher Joy Buolamwini found that the algorithms powering three commercially available facial recognition software systems were failing to recognize darker-skinned complexions. Generally, most facial recognition training data sets are estimated to be more than 75 percent male and more than 80 percent white. When the person in the photo was a white man, the software was accurate 99 percent of the time at identifying the person as male. According to Buolamwini’s research, the product error rates for the three products were less than one percent overall, but increased to more than 20 percent in one product and 34 percent in the other two in the identification of darker-skinned women as female.
 
 
-[Here is](https://arxiv.org/pdf/1902.11097.pdf) a study from Georgia Tech about 5 other ways racial bias seeps into facial regonition systems: 
-
+[Here is](https://arxiv.org/pdf/1902.11097.pdf) a study from Georgia Tech about 5 other ways racial bias seeps into facial regonition systems.
 
 The same Brookings Institute link says that: 
 
