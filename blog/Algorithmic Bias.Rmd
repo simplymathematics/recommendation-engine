@@ -8,7 +8,7 @@ output: html_document
 
 # Algorithmic Bias
 
-It is well-documented that machine learning is both racist and sexist -- if only on accident. [Amazon's facial recognition platforms](https://time.com/5520558/artificial-intelligence-racial-gender-bias/) believes Oprah Winfrey (and many other black women) to be men. Search algorithms perpetuate racial biases that leads to results like, when [one searches for two different phrases online](https://www.washingtonpost.com/gdpr-consent/?destination=%2fopinions%2f2018%2f12%2f17%2fwhy-your-ai-might-be-racist%2f%3f&utm_term=.7b7d1505f6e3):
+It is well-documented that machine learning can be both racist and sexist -- if only on accident. [Amazon's facial recognition platforms](https://time.com/5520558/artificial-intelligence-racial-gender-bias/) believes Oprah Winfrey (and many other black women) to be men. Search algorithms perpetuate racial biases that leads to results like, when [one searches for two different phrases online](https://www.washingtonpost.com/gdpr-consent/?destination=%2fopinions%2f2018%2f12%2f17%2fwhy-your-ai-might-be-racist%2f%3f&utm_term=.7b7d1505f6e3):
 
 > Try typing “Asian girls” into the Google search bar. If your results are like mine, you’ll see a selection of come-ons to view sexy pictures, advice for “white men” on how to pick up Asian girls and some items unprintable in this publication. Try “Caucasian girls” and you’ll get wonky definitions of “Caucasian,” pointers to stock photos of wholesome women and kids, and some anodyne dating advice.
 
@@ -73,8 +73,8 @@ It's wrong to assert that this problem is one that can be solved by computers. T
 
 [The Univesity of California San Francisco](https://diversity.ucsf.edu/resources/strategies-address-unconscious-bias) says that: 
 
-1. Promote self-awareness and regonize the biases we all have
-2. Since categorization gives rise to implicit biases naturally in huamns, it is important to aprroach these problems in a an open way
+1. We should promote self-awareness and regonize the biases we all have.
+2. Since categorization gives rise to implicit biases naturally in huamns, it is important to aprroach these problems in a an open way.
 3. Exposure to people of different backgrounds is important, but
 4. Facilitated discussions and training sessions on bias literacy had the greatest effect.
 
