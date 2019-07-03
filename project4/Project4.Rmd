@@ -1,0 +1,225 @@
+---
+title: "Item/User Based Collaborative Filtering using Recommender Lab"
+output: 
+  html_document: 
+    df_print: kable
+    toc: yes
+    toc_depth: 6
+  html_notebook:
+    code_folding: hide
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_depth: 6
+    toc_float: yes
+---
+
+
+
+# Data
+First of all, we need data. Luckily, the `recommenderLab` package contains the Jester5k set which has 5 thousand of ratings across hundreds of users. B
+
+```{r, eval=T, echo=F, warning=F, message=F}
+
+library(recommenderlab)
+
+data("Jester5k")
+mtx <- Jester5k
+set.seed(1)
+idx <- evaluationScheme(mtx, method = "split", train = .7, k = 1, given = 15)
+idx
+```
+
+# Models
+
+We will train several models as covered in the previous entries. In particular, we will look at user- and item-base collaborative filtering, svd, and Funk's algorithm, as well as alternating least squares. In addition, we evaulate a model that randomly assigns values.
+
+## Model 1
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model1 <- Recommender(getData(idx, "train"), method = "UBCF", 
+                     parameter = list(method = "cosine"))
+recommendations1 <- predict(model1, getData(idx, "known"), type = "ratings")
+pred1 <- calcPredictionAccuracy(recommendations1, getData(idx, "unknown"))
+```
+
+
+## Model 2
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model2 <- Recommender(getData(idx, "train"), method = "IBCF", 
+                     parameter = list(method = "cosine"))
+recommendations2 <- predict(model2, getData(idx, "known"), type = "ratings")
+pred2 <- calcPredictionAccuracy(recommendations2, getData(idx, "unknown"))
+```
+
+## Model 3
+
+```{r, eval=T, echo=T, warning=F, message=F}
+model3 <- Recommender(getData(idx, "train"), method = "RANDOM", 
+                     parameter = list(method = "cosine"))
+recommendations3 <- predict(model3, getData(idx, "known"), type = "ratings")
+pred3 <- calcPredictionAccuracy(recommendations3, getData(idx, "unknown"))
+```
+
+## Model 4
+
+
+```{r, eval=T, echo=F, warning=F, message=F}
+model4 <- Recommender(getData(idx, "train"), method = "SVD", 
+                     parameter = list(method = "cosine"))
+recommendations4 <- predict(model4, getData(idx, "known"), type = "ratings")
+pred4 <- calcPredictionAccuracy(recommendations4, getData(idx, "unknown"))
+
+```
+
+## Model 5
+
+
+```{r, eval=T, echo=F, warning=F, message=F}
+model5 <- Recommender(getData(idx, "train"), method = "SVDF", 
+                     parameter = list(method = "cosine"))
+recommendations5 <- predict(model5, getData(idx, "known"), type = "ratings")
+pred5 <- calcPredictionAccuracy(recommendations5, getData(idx, "unknown"))
+```
+
+## Model 6
+
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+model6 <- Recommender(getData(idx, "train"), method = "ALS")
+recommendations6 <- predict(model6, getData(idx, "known"), type = "ratings")
+pred6 <- calcPredictionAccuracy(recommendations6, getData(idx, "unknown"))
+
+```
+
+Below, we can see the results of those initial models.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+preds <- rbind(pred1, pred2, pred3, pred4, pred5, pred6)
+preds <- as.data.frame(preds)
+row.names(preds) <- c("UBCF", "IBCF", "Random", "SVD", "Funk", "ALS")
+preds
+```
+
+Next, we will weight the models according to the inverse of their RMSE scores. We also apply a linear scaling factor so that the values add up to exactly 1.
+
+```{r}
+these.weights <- preds$RMSE
+these.weights <- 1/these.weights
+these.weights <- these.weights/sum(these.weights)
+```
+
+These weights allow us to create a hybrid model.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+model7 <- HybridRecommender(
+  model1, model2, model3, model4, model5, model6, 
+  weights = these.weights
+)
+
+recommendations7 <- predict(model7, getData(idx, "known"), type = "ratings")
+pred7 <- calcPredictionAccuracy(recommendations7, getData(idx, "unknown"))
+pred7
+```
+
+As we see from the above results, this outperforms all of the other models we tested.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+preds <- rbind(preds, pred7)
+preds <- as.data.frame(preds)
+row.names(preds) <- c("UBCF", "IBCF", "Random", "SVD", "Funk", "ALS", "Hybrid")
+preds
+```
+
+# More Serendipity
+
+By doubling the weight of the item-based collaborative filtering, we build a model that is more dependent on the relationship between items-- traits that are hidden to the user but reflected in the data nonetheless.
+
+```{r}
+factor = 2
+these.weights <- preds$RMSE
+these.weights <- these.weights[-7]
+these.weights[2] <- these.weights[2] * 1/factor
+these.weights <- 1/these.weights
+these.weights <- these.weights/sum(these.weights)
+
+```
+
+We see below that this model performs about as well as the hybrid model, but is more strongly influenced by similar items.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+model8 <- HybridRecommender(
+  model1, model2, model3, model4, model5, model6, 
+  weights = these.weights
+)
+
+recommendations8 <- predict(model8, getData(idx, "known"), type = "ratings")
+pred8 <- calcPredictionAccuracy(recommendations8, getData(idx, "unknown"))
+as.data.frame(pred8)
+```
+
+# More Novelty
+
+By doubling the influence of the random model, we can increase the novelty experienced by a user.
+
+```{r}
+factor = 2
+these.weights <- preds$RMSE
+these.weights <- these.weights[-7]
+these.weights[3] <- these.weights[3] * 1/factor
+these.weights <- 1/these.weights
+these.weights <- these.weights/sum(these.weights)
+```
+
+There was no significant loss in accuracy when adding randomness to the model, but would increase a user's feed's novelty.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+model9 <- HybridRecommender(
+  model1, model2, model3, model4, model5, model6, 
+  weights = these.weights
+)
+
+recommendations9 <- predict(model9, getData(idx, "known"), type = "ratings")
+pred9 <- calcPredictionAccuracy(recommendations8, getData(idx, "unknown"))
+pred9
+```
+
+# More Diversity
+
+By doubling the influence of the user-based collaborative filtering, we can expose users to items they might not have been exposed to otherwise. This is in the vein of Instagram 'influencers' or trending Twitter hashtags that allow a diverse set of people to aggregate in one digital space.
+
+```{r}
+factor = 2
+these.weights <- preds$RMSE
+these.weights <- these.weights[-7]
+these.weights[1] <- these.weights[1] * 1/factor
+these.weights <- 1/these.weights
+these.weights <- these.weights/sum(these.weights)
+```
+
+Again, there appears to be no large loss in accuracy despite there being an increase in item diveristy for a given user.
+
+```{r, eval=T, echo=T, warning=F, message=F}
+
+model10 <- HybridRecommender(
+  model1, model2, model3, model4, model5, model6, 
+  weights = these.weights
+)
+recommendations10 <- predict(model8, getData(idx, "known"), type = "ratings")
+pred10 <- calcPredictionAccuracy(recommendations10, getData(idx, "unknown"))
+pred10
+```
+
+# Conclusion
+
+A hybrid model produced the most accurate results. It has the added benefit of tunable parameters that allow us to adjust the 'flavor' of the recommendations, a la Netflix. Additionally, this hybrid model could be tuned to maximize accuracy. 
+
+# Next Steps
+
+Real-time users would enable a analysis of trends both in a given region and across the world. This would allow for even greater diversity and serendipity. In particular, I could gather all user-item data points in real time, calculate the most popular 5 topics by region, and add a trending data feed. Real-time analysis would require a redundant cloud-infrastructure, Spark to process millions (or billions) of datapoints, and some CUDA-capable GPUs to speed up the matrix factorization calculations. Additionally, with cloud infrastructure, I could parameterize the factors for each of the above models, run A/B tests between models on live users, and get immediate feedback on the efficacy of a given algorithm.
+
