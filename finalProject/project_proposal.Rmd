@@ -1,0 +1,21 @@
+---
+title: "Project Proposal"
+author: "simplymathematics"
+date: "7/7/2019"
+output: html_document
+---
+
+# Project Proposal
+## Fast Objection Detection using SVD and PCA
+
+# Introduction
+
+Traditionally, objection detection algorithms use neural networks to distinguish objects in images. However, because SVD is a 'trained' model that uses simple matrix operations (rather than multivariable caculus), new data can be processed much faster. Combining them has already [shown to be very effective](https://link.springer.com/chapter/10.1007/978-3-319-13560-1_65). 
+
+# Hypothesis
+
+Singular value decomposition should be an effective tool for object processing in images. However, [prior research has noted](https://pdfs.semanticscholar.org/f044/303b0ae730eb4fcbedbe4967d82606d75cdd.pdf) that RGB and Gray-Scale processing might not be fast enough for all applications. My goal is to create an algorithm with decent accuracy that can match new data with pre-trained models of things like stop-signs and pedestrians.
+
+# Reasons
+
+Fast object detection will be critical to autonomous cars, delivery drones, and robotics as a larger field. I'm also interested in developing embedded algorithms for stuff like speech detection and image recognition instead of relying on plentiful processing power in the cloud. This is the first step to that kind of system.
