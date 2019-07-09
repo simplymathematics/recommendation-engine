@@ -4,6 +4,7 @@ author: simplymathematics
 date: 7/1/19
 autosize: true
 
+
 Some Context
 =========================================================
 
@@ -85,9 +86,9 @@ a car going 70mpn (31ms) must respond to and stop for any obstruction that appea
 
 $$
 v_f = v_i + at \Rightarrow \\
-t(a=3, v = 31) = \frac{\Delta v}{a} \Rightarrow \\\
-t(a = 3) = 10.3s \Rightarrow
-t (a = 1.5) = 20.1s
+t(a=30, v = 31) = \frac{\Delta v}{a} \Rightarrow \\\
+t(a = 30) = 1.03s \Rightarrow
+t (a = 15) = 2.01s
 $$
 
 
@@ -97,39 +98,28 @@ We also know that
 
 $$
 v_f^2 = v_i^2 + ax \Rightarrow \\
-x(a=3, v = 31) = \frac{\Delta v}{2a} \Rightarrow \\\
-x(a = 3) = 160 \text{ meters} \Rightarrow 
-x (a = 1.5) = 321 \text{ meters}
+x(a=30, v = 31) = \frac{\Delta v}{2a} \Rightarrow \\\
+x(a = 30) = 16.0 \text{ meters} \Rightarrow 
+x (a = 15) = 32.1 \text{ meters}
 $$
-Additionally since t = 10.3 and v = 31m/s, we know that we can travel
+Additionally since t = 1.03 and v = 31m/s, we know that we can travel
 
 $$
 
 x = v * t \Rightarrow 
-x = 10.3 * 31 = 319.3 m \\
-321 - 319 = 2 \text{ meters}
+x = 1.03 * 31 = 31m \\
+32 - 31 = 1 \text{ meters}
 
 $$
 in the comfortable case, or
 
 $$
 
-321 - 160 = 161 \text{ meters}
+32 - 16 = 16 \text{ meters}
 
 $$
 
 in the astronaut case.
-
-```{r, echo = F, eval = T}
-x.min <- 160
-x.max <- 321
-t.min <- 10.3
-t.max <- 20.1
-xs <- c(x.min, x.max)
-ts <- c(t.min, t.max)
-df <- as.data.frame(cbind(xs, ts))
-
-```
 
 
 
@@ -139,8 +129,8 @@ At 31m/s how long is that?
 $$
 
 x = v * t \Rightarrow t = x/v \\
-t{x_{min}} \approx 2/31 \approx .06 s \\
-t{x_{max}} \approx 160/31 \approx 5.2s
+t{x_{min}} \approx 1/31 \approx .06 s \\
+t{x_{max}} \approx 16/31 \approx .52s
 
 $$
 

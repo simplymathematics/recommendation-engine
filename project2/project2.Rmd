@@ -22,8 +22,6 @@ library(recommenderlab)
 data("MovieLense")
 
 head(as(MovieLense[1,], "list")[[1]])
-
-
 ```
 
 Additionally, we can visualize this matrix by plotting the items on the x-axis, the users on the y-axis and assigning a color value to the rating. As we can see, this is a very sparse matrix, meaning that most users did not rate most things. 
