@@ -99,7 +99,7 @@ We also know that
 $$
 v_f^2 = v_i^2 + ax \Rightarrow \\
 x(a=30, v = 31) = \frac{\Delta v}{2a} \Rightarrow \\\
-x(a = 30) = 16.0 \text{ meters} \Rightarrow 
+x (a = 30) = 16.0 \text{ meters} \Rightarrow 
 x (a = 15) = 32.1 \text{ meters}
 $$
 Additionally since t = 1.03 and v = 31m/s, we know that we can travel
@@ -163,8 +163,16 @@ That is to say that the constant terms go away and we only care about the size o
 
 Somehow it gets more Complex
 ================================================================
-Object detection has been used in explaining  O(n* m* (ij + jk + kl))
-where $i, j \text{ and } k$ represent the  number of nodes across 4 layers. In general, this grows to $O(n*m*l^2)$ where $m, n$ are the dimensions of the matrix and $l$ is the number of layers. Consequently, SVD algorithms are an [order of magnitude faster](http://rakaposhi.eas.asu.edu/s01-cse494-mailarchive/msg00028.html) with $(mn^2)$ for relatively large neural networks. They consequently take up $O(n)$ memory where neural networks have the same requirements as above. 
+Object detection has been used in explaining $ O(n m (ij + jk + kl))$  
+
+
+where $i, j \text{ and } k$ represent the  number of nodes across 4 layers. In general, this grows to $O(n*m*l^2)$ .  
+
+where $m, n$ are the dimensions of the matrix and $l$ is the number of layers.  
+
+Consequently, SVD algorithms are an [order of magnitude faster](http://rakaposhi.eas.asu.edu/s01-cse494-mailarchive/msg00028.html) with $(mn^2)$ for relatively large neural networks.  
+
+They consequently take up $O(n)$ memory where neural networks have the same requirements as above. 
 
 
 
