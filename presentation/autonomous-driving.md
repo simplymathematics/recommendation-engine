@@ -1,18 +1,15 @@
 Autonomous Driving-- Real Time Data Science
 ========================================================
 author: simplymathematics
-date: 
+date: 7/1/19
 autosize: true
 
+Some Context
+=========================================================
 
-========================================================
-<center> ![Machine Learning XKCD](machine_learning.png) </cemter>
+- "In CS, it can be hard to explain the difference between the easy and the virtually impossible" 
 
-
-
-========================================================
-<center> ![Tasks XKCD](tasks.png) </center>
-
+- "[Machine Learning is when] your pour the data into this big pile of linear algebra, then collect the answers on the other side." ~ Randall Munroe, XKCD
 
 How Autonomous Cars Work
 ========================================================
@@ -23,7 +20,11 @@ Velocity Calculation $\rightarrow$  Pedestrian/Traffic Modelling $\rightarrow$
 
 Decision (Left, Right, Break, Gas)
 
+
 <center> ![Self Driving XKCD](self_driving.png) </center>
+
+
+
 
 
 What is the scale of the data?
@@ -180,7 +181,7 @@ This is a giant, unsolved problem for all autonomous car companies everywhere
 
 - [Here's a 3rd Instance in Florida involving Tesla.](https://www.wired.com/story/teslas-latest-autopilot-death-looks-like-prior-crash/)
 
-- [The famous Uber crash was also at highway speeds and killed someone due to failures in object recognition](https://www.engadget.com/2018/05/07/uber-crash-reportedly-caused-by-software-that-ignored-objects-in/?guccounter=1&guce_referrer=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8&guce_referrer_sig=AQAAADhao-YTk9C4lHgo9Me_0hYFgzPfScdQ4C5L9zYYSTaxHKEQqMi_NshN3grQIo3eAKHjMPIsnFAeIuGvyiQX7aoUwE9ZR6LsrV_TlbCPabQsUknQx3IlNdsLXrVLxLMRXpLSLVI9VeRfqqxCLnGWM_0842psLfYNFJHgDk2FWsQ2)
+- [Th e famous Uber crash was also at highway speeds and killed someone due to failures in object recognition](https://www.engadget.com/2018/05/07/uber-crash-reportedly-caused-by-software-that-ignored-objects-in/?guccounter=1&guce_referrer=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8&guce_referrer_sig=AQAAADhao-YTk9C4lHgo9Me_0hYFgzPfScdQ4C5L9zYYSTaxHKEQqMi_NshN3grQIo3eAKHjMPIsnFAeIuGvyiQX7aoUwE9ZR6LsrV_TlbCPabQsUknQx3IlNdsLXrVLxLMRXpLSLVI9VeRfqqxCLnGWM_0842psLfYNFJHgDk2FWsQ2)
 
 The Solution
 =====================================================================
@@ -190,3 +191,6 @@ SVD algorithms can be used in place of or in conjunction with neural networks to
 - [SVD + NN](https://ieeexplore.ieee.org/dAocument/7464858)
 - [Raw SVD](https://www.math.cuhk.edu.hk/~lmlui/CaoSVDintro.pdf)
 - [Background Removal](https://github.com/carriexu24/Background-Removal-with-SVD)
+- GPU processing (allows for reducing run-time complexity such that the n term goes away in exchange for more memory allocation)
+- Using multi-threaded languages (so no R or Python)
+- Embedded design
