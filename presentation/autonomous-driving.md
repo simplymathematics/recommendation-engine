@@ -1,0 +1,192 @@
+Autonomous Driving-- Real Time Data Science
+========================================================
+author: simplymathematics
+date: 
+autosize: true
+
+
+========================================================
+<center> ![Machine Learning XKCD](machine_learning.png) </cemter>
+
+
+
+========================================================
+<center> ![Tasks XKCD](tasks.png) </center>
+
+
+How Autonomous Cars Work
+========================================================
+
+Data Collection $\rightarrow$ Object Detection $\rightarrow$ Localization $\rightarrow$ 
+
+Velocity Calculation $\rightarrow$  Pedestrian/Traffic Modelling $\rightarrow$ 
+
+Decision (Left, Right, Break, Gas)
+
+<center> ![Self Driving XKCD](self_driving.png) </center>
+
+
+What is the scale of the data?
+========================================================
+
+Let's assume that we have a 4:3 aspect ratio camera that takes 1MP pictures and has a field of view of 30 degrees (sufficiently far from the lens). 
+
+That means that
+$$
+10^6 \text{pixels} \\
+3 \text{ bytes per pixel} \\
+12 \text{ cameras for 360 degree coverage} \\
+30 \text{ pictures per second} \\
+$$
+
+
+```
+[1] 1.08e+09
+```
+
+Or 1.08 Gigabytes per second!
+
+How many pixels in the x and y directions?
+=======================================================
+We also know that a 1 MP camera with a 4:3 aspect ratio has dimensions
+
+$$
+
+4x * 3x = 10^6 \Rightarrow \\
+12x^2 = 10^6 \Rightarrow x \approx 288 \\
+\text{width} \approx 1154 \text{ pixels}\\
+\text{height} \approx 866
+
+$$
+
+Wait. 1 MP isn't very good. What can we see when?
+========================================================
+This is a simple trigonometry problem. If our camera has a 30 degree field of view, and a distance, $d$, then we know that each of the 1152 pixels along the x-axis is exactly $x$ units long (measured in the same units as d). Therefore
+
+$$
+
+\tan(15^\circ) = \frac{d}{2x} \Rightarrow \\
+2x \tan(15^\circ) = d \Rightarrow 
+\text{when } x = 100 \Rightarrow \\
+d = 54m \Rightarrow 
+1 \text{pixel} = 1152/54 = 21 \text{ pixels per meter} \Rightarrow \\
+1 \text{pixel} = .04 \text{ meters}
+
+$$
+
+That means that at 100 meters, a person occupies a handful of pixels while in profile (like when they are crossing a street). 
+
+How fast can a car stop?
+========================================================
+If we assume that humans can withstand at most 3 Gs of gravity, [about as much as astronauts experience in the Space Shuttle launch](https://www.cnbc.com/id/100959733), then we know that
+a car going 70mpn (31ms) must respond to and stop for any obstruction that appears on the road.
+
+
+$$
+v_f = v_i + at \Rightarrow \\
+t(a=3, v = 31) = \frac{\Delta v}{a} \Rightarrow \\\
+t(a = 3) = 10.3s \Rightarrow
+t (a = 1.5) = 20.1s
+$$
+
+
+Reaction Distance
+==========================================================
+We also know that
+
+$$
+v_f^2 = v_i^2 + ax \Rightarrow \\
+x(a=3, v = 31) = \frac{\Delta v}{2a} \Rightarrow \\\
+x(a = 3) = 160 \text{ meters} \Rightarrow 
+x (a = 1.5) = 321 \text{ meters}
+$$
+Additionally since t = 10.3 and v = 31m/s, we know that we can travel
+
+$$
+
+x = v * t \Rightarrow 
+x = 10.3 * 31 = 319.3 m \\
+321 - 319 = 2 \text{ meters}
+
+$$
+in the comfortable case, or
+
+$$
+
+321 - 160 = 161 \text{ meters}
+
+$$
+
+in the astronaut case.
+
+
+
+
+
+At 31m/s how long is that?
+=========================================
+
+$$
+
+x = v * t \Rightarrow t = x/v \\
+t{x_{min}} \approx 2/31 \approx .06 s \\
+t{x_{max}} \approx 160/31 \approx 5.2s
+
+$$
+
+That is to say, timing is very, very important. An autonomous car at highway speeds must make a decision in seconds.
+
+
+How Autonomous Cars Work
+========================================================
+
+Data Collection $\rightarrow$ Object Detection $\rightarrow$ Localization $\rightarrow$ 
+
+Velocity Calculation $\rightarrow$  Pedestrian/Traffic Modelling $\rightarrow$ 
+
+Decision (Left, Right, Break, Gas)
+
+<center> ![Self Driving XKCD](self_driving.png) </center>
+
+
+
+Complexity
+============================================================
+
+[Source](https://ai.stackexchange.com/questions/5728/what-is-the-time-complexity-for-training-a-neural-network-using-back-propagation)
+
+1 'for' loop has the complexity of $O(n)$ because is must loop through each element once
+2 nested 'for' loops complexity of $O(n^2)$ where n is the rank of the matrix
+
+That is to say that the constant terms go away and we only care about the size of the leading polynomial (more or less). 
+
+
+Somehow it gets more Complex
+================================================================
+Object detection has been used in explaining  O(n* m* (ij + jk + kl))
+where $i, j \text{ and } k$ represent the  number of nodes across 4 layers. In general, this grows to $O(n*m*l^2)$ where $m, n$ are the dimensions of the matrix and $l$ is the number of layers. Consequently, SVD algorithms are an [order of magnitude faster](http://rakaposhi.eas.asu.edu/s01-cse494-mailarchive/msg00028.html) with $(mn^2)$ for relatively large neural networks. They consequently take up $O(n)$ memory where neural networks have the same requirements as above. 
+
+
+
+
+So what
+===================================================================
+
+This is a giant, unsolved problem for all autonomous car companies everywhere
+
+- [A Tesla crashed into a highway barrier killing the driver when its object detection failed. Even though it tried to alert the driver, the driver did not respond](https://techcrunch.com/2019/05/01/tesla-sued-in-wrongful-death-lawsuit-that-alleges-autopilot-caused-crash/?guccounter=1&guce_referrer_us=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8&guce_referrer_cs=sfuyKjPp67RP5YAPrMmpqg)
+
+- [Tesla hit and destroyed a robot at CES under similar circumstances](https://www.independent.co.uk/life-style/gadgets-and-tech/news/tesla-robot-crash-self-driving-car-promobot-putin-ces-2019-las-vegas-elon-musk-a8718866.html)
+
+- [Here's a 3rd Instance in Florida involving Tesla.](https://www.wired.com/story/teslas-latest-autopilot-death-looks-like-prior-crash/)
+
+- [The famous Uber crash was also at highway speeds and killed someone due to failures in object recognition](https://www.engadget.com/2018/05/07/uber-crash-reportedly-caused-by-software-that-ignored-objects-in/?guccounter=1&guce_referrer=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8&guce_referrer_sig=AQAAADhao-YTk9C4lHgo9Me_0hYFgzPfScdQ4C5L9zYYSTaxHKEQqMi_NshN3grQIo3eAKHjMPIsnFAeIuGvyiQX7aoUwE9ZR6LsrV_TlbCPabQsUknQx3IlNdsLXrVLxLMRXpLSLVI9VeRfqqxCLnGWM_0842psLfYNFJHgDk2FWsQ2)
+
+The Solution
+=====================================================================
+
+SVD algorithms can be used in place of or in conjunction with neural networks to create a fast(er) object detection algorithm.
+
+- [SVD + NN](https://ieeexplore.ieee.org/dAocument/7464858)
+- [Raw SVD](https://www.math.cuhk.edu.hk/~lmlui/CaoSVDintro.pdf)
+- [Background Removal](https://github.com/carriexu24/Background-Removal-with-SVD)
