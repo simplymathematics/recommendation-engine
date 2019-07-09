@@ -1,0 +1,41 @@
+---
+title: "Combatting Algorithmic Bias"
+author: "simplymathematics"
+date: "7/7/2019"
+output: html_document
+---
+
+# Tips and Techniques for Combatting Algorithmic Bias
+
+Famously, algorithms [have been shown to carry human biases](Algorithmic-Bias.html). This problem has two root causes-- the data contains encoded biases, and humans fail to correct them.
+
+
+## The Problem with Data
+
+Mathematically speaking, bias is when a predicted value is different than the expected value for a given result. [This comes in several flavors](https://www.statisticshowto.datasciencecentral.com/what-is-bias/)
+
+* biased estimators: when your measured values don't reflect the actual value of a data point
+* selection bias: incidentally removes randomness due to things like which items are surveyed in relation to what's actually being measured
+* non-response bias: when people fail to respond to a survey
+* undercoverage: when your training data don't accurately cover the entire population
+* voluntary response bias: the people who disclose information to your algorithm may have characteristics different from the population mean
+* social desirability bias: when survey respondents allow population behavior to effect their response (i.e. rating a movie higher because your friends like it)
+
+## Fixing Bias in Design and Implementation
+
+Each one of these [can be combatted](https://www.ajlunited.org/the-coded-gaze). 
+
+Biased estimators are fixed by [using large simple, random samples](https://medium.com/@akelleh/how-do-you-correct-selection-bias-d781a9b12de2).
+
+[Selection Bias](https://www.iwh.on.ca/what-researchers-mean-by/selection-bias) is fixed by being conscious of the total population and simple random samples. In particular, we must use sample populations that are the same as the real population.
+
+Non-response bias is fixed by designing observational studies around latent facts. In the context of recommender systems, we can measure a customer's time watching a particular program rather than trusting them to rate it accurately.
+
+Undercoverage is fixed by ensuring that all items and users are represented in the training data, if not necessarily all itesm for all users.
+
+Voluntary response bias can be fixed the same was a non-response bias-- by using latent factors rather than hard-coded numerals.
+
+Social desirability bias can be reduced through anonymous surveys and centering ratings around a common mean.
+
+
+  
