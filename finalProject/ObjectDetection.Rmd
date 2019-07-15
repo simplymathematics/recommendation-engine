@@ -1,0 +1,120 @@
+---
+title: "Object Detection"
+author: "simplymathematics"
+date: "7/13/2019"
+output: html_document
+---
+```{r}
+#install.packages("darch")
+library(readmnist)
+library(dplyr)
+train.images <- Read.mnist("../digits/train-images-idx3-ubyte")
+train.labels <- Read.mnist("../digits/train-labels-idx1-ubyte")
+
+test.labels <- Read.mnist("../digits/t10k-labels-idx1-ubyte")
+
+test.images <- Read.mnist("../digits/t10k-images-idx3-ubyte")
+test.images <- test.images$pic/255
+train.labels <- (train.labels$labels)
+test.labels <- test.labels$labels
+train.images <- train.images$pic /255
+```
+
+```{r}
+
+raw = file("../digits/t10k-images-idx3-ubyte", "rb")
+#
+readBin(raw, integer(), n=1, endian="big")
+readBin(raw, integer(), n=1, endian="big")
+readBin(raw, integer(), n=1, endian="big")
+readBin(raw, integer(), n=1, endian="big")
+m = matrix(readBin(raw, integer(), size=1, n=28^2, endian="big"), nrow = 28, ncol = 28)
+image(m)
+
+```
+```{r}
+par(mfrow=c(4,4))
+par(mar=c(0,0,0,0))
+for(i in 1:16){
+  m = matrix(readBin(raw,integer(), size=1, n=28*28, endian="big"),28,28);
+  image(m[,28:1])
+}
+close(raw)
+```
+
+```{r}
+S <- decomposed.mtx$d
+S <- diag(S)
+U <- as.matrix(decomposed.mtx$u)
+V <- as.matrix(decomposed.mtx$v)
+
+```
+
+```{r}
+A <- test.images
+
+decomposed.mtx <- svd(A)
+dim(diag(decomposed.mtx$d))
+dim(decomposed.mtx$v)
+dim(decomposed.mtx$u)
+```
+```{r, eval = F, echo = F}
+variance <- .99
+k = 100
+
+#while (sum(S[1:k])/sum(S) < variance){
+# k = k + 1 
+# print(k)
+#}
+k
+```
+
+```{r}
+table(train.labels)
+zeroes <- train.images[train.labels==0]
+ones <- train.labels[train.labels==1]
+twos <- train.labels[train.labels==2]
+threes <- train.labels[train.labels==3]
+fours <- train.labels[train.labels==4]
+fives <- train.labels[train.labels==5]
+sixes <- train.labels[train.labels==6]
+sevens <- train.labels[train.labels==7]
+eights <- train.labels[train.labels==8]
+nines <- train.labels[train.labels==9]
+
+numbers <- c(zeroes, ones, twos, threes, fours, fives, sixes, sevens, eights, nines)
+
+
+#for (i in 1:10){
+#  singular.values[i,] <- diag(svd(numbers[i])$d[1:k])
+#}
+```
+
+```{r}
+#S <- S[1:k,]fRe
+U <- U[,1:k]
+#V <- (V[,1:k])
+
+reduced <- as.matrix(train.images[,-1]) %*% U
+dim(U)
+dim(S)
+dim(V)
+
+```
+
+
+```{r}
+product <- (U %*% S %*% (V))
+dim(product)
+X <- product %*% A
+q <- test[1,]
+x <- product * q
+D <- X-x * seq(1, 1, 1)
+D <- (D*t(D))
+D <- diag(as.matrix(sapply(D, as.numeric)))
+D
+```
+
+
+
+
