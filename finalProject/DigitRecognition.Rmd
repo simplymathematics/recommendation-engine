@@ -1,0 +1,169 @@
+---
+title: "DigitRecognition"
+author: "simplymathematics"
+date: "7/16/2019"
+output: html_document
+---
+
+# Test/Train split
+```{r}
+set.seed(123)
+train <- read.csv("../digits/train.csv", header = T)
+dim(train)
+subspace.size <-  floor(.1 * nrow(train))
+idx <- sample(seq_len(nrow(train)), size = subspace.size)
+train <- train[idx,]
+dim(train)
+ #create subspace for testing
+
+
+sample.size <- floor(.7 * nrow(train))
+idx <- sample(seq_len(nrow(train)), size = sample.size)
+train <- train[idx, ]
+test <- train[-idx, ]
+```
+
+
+# Save Labels for Later
+```{r}
+train.labels <- (train$label)
+test.labels  <- (test$label)
+```
+
+
+# Visualize a single number
+```{r}
+img <- matrix(as.numeric(train[1, -1]), 28, 28)
+img <- apply((img), 1, rev)
+img <- t(img) 
+image(img, col = grey(seq(0,1, length=256)))
+```
+
+# Scale Test Data
+```{r}
+library(caret)
+cleaned <-preProcess((train[,-1]), method=c("pca", "nzv", "center" , "scale"))
+test.cleaned <- preProcess((test[,-1]), method=c("pca", "nzv", "center" , "scale"))
+
+cleaned <- predict(cleaned, newdata = train[,-1])
+test.cleaned <- predict(test.cleaned, newdata = test[,-1])
+
+```
+
+# Binning the numbers by label
+```{r}
+digits <- seq(0,9)
+train.bins   <- list(0)
+test.bins <- list(0)
+
+for (i in 0:9){
+  train.idx <- which(train$label == i)
+  train.bins[[i + 1]]  <- train[train.idx,]
+  train.bins[[i + 1]]$label  <-  NULL
+}
+for (i in 0:9){
+  test.idx <- which(test$label == i)
+  test.bins[[i + 1]]  <- test[test.idx,]
+  test.bins[[i + 1]]$label  <-  NULL
+}
+```
+
+# Calculate SVD for each Bin
+```{r}
+calculate <- function(x){
+  mtx <- as.matrix(x)
+  tmp <- svd(mtx)
+  return(tmp)
+}
+
+svd.list <- lapply(train.bins, calculate)
+#test.svd <- lapply(test.bins, calculate)
+```
+
+
+# Eigen Digits
+
+```{r}
+for(i in 1:3){
+this <- svd.list
+rmtx <- matrix(as.numeric(this[[i]]$v), nrow = 28, ncol = 28)
+rmtx <- apply((rmtx), 1, rev)
+rmtx <- t(rmtx)
+image(rmtx, col = grey(seq(0,1, length=255)))
+print(i)
+}
+```
+[Source](https://pdfs.semanticscholar.org/cdab/c8ec5e0629752980f8cb613a56a33efb05c7.pdf)
+
+
+
+
+# Model
+```{r}
+typeof(cleaned)
+model <- train(cleaned, y=train.labels, method = "knn")
+model
+```
+```{r}
+model
+
+```
+
+
+#Conclusion
+
+Using matrix decomposition allows for faster processing of the categories. This system works about as well as the previosu models given that the range is 2 * as big. Additionally, I started optimizing the process below and allow for fine-grained parameter tuning. However, I ran into a wall and need to sleep on it for now. I do have a 'working' model, for whatver it is worth.
+
+
+# Appendix (TODO: Remove this for final presentation)
+
+```{r}
+k = 200
+input <- svd.list[[1]]
+bin <- train.bins[[1]]
+bin <- as.matrix(bin)
+test.row <- test.bins[[1]][1,]
+test.row <- as.matrix(test.row)
+```
+
+```{r}
+cosineDist <- function(x){
+  as.dist(1 - x%*%t(x)/(sqrt(rowSums(x^2) %*% t(rowSums(x^2))))) 
+}
+```
+
+[Self-implemented Model](https://pdfs.semanticscholar.org/cdab/c8ec5e0629752980f8cb613a56a33efb05c7.pdf)
+
+```{r}
+#svd.model <- function(input) {
+  U <- input$u[,1:k]
+  print("U:")
+  dim(U)
+  V <- input$v[,1:k]
+  S <- diag(input$d[1:k])
+  print("S:")
+  dim(S)
+  print("V:")
+  dim(V)
+  X <- U %*% S %*% t(V) 
+  X <- t(X)
+  print("X:")
+  dim(X)
+  print("bin:")
+  dim(bin)
+  expected <- X %*% bin
+  print("++++++++++++++")
+  dim(expected)
+  print("Test Row:")
+  dim(test.row)
+  #x <- X %*% test.row
+  #print("x: ")
+  #dim(x)
+  #D <- expected - x*rep(1, nrow(x))
+#}
+  
+
+
+#svd.model(svd.list[[1]])
+```
+

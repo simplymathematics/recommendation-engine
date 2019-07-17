@@ -5,62 +5,176 @@ date: "7/13/2019"
 output: html_document
 ---
 ```{r}
-#install.packages("darch")
 library(readmnist)
 library(dplyr)
+library(ggplot2)
+```
+
+```{r}
 train.images <- Read.mnist("../digits/train-images-idx3-ubyte")
 train.labels <- Read.mnist("../digits/train-labels-idx1-ubyte")
+train.images <- train.images$pic
 
 test.labels <- Read.mnist("../digits/t10k-labels-idx1-ubyte")
-
 test.images <- Read.mnist("../digits/t10k-images-idx3-ubyte")
-test.images <- test.images$pic/255
+test.images <- test.images$pic
+
+
 train.labels <- (train.labels$labels)
-test.labels <- test.labels$labels
-train.images <- train.images$pic /255
+labels <- test.labels$labels
+
+
+train.data <- as.data.frame(cbind(train.images, labels))
+
+labels <- test.labels$labels
+test.data <- as.data.frame(cbind(test.images, labels))
+
+```
+```{r}
+train.images <- train.images[1:1000,]
+
+```
+
+```{r}
+processed.data <- prcomp(train.images[1:1000,], center = T, scale = T, tol = .05)
+deviations <- processed.data$sdev^2 / sum(processed.data$sdev^2)
+
 ```
 
 ```{r}
 
 raw = file("../digits/t10k-images-idx3-ubyte", "rb")
 #
-readBin(raw, integer(), n=1, endian="big")
-readBin(raw, integer(), n=1, endian="big")
-readBin(raw, integer(), n=1, endian="big")
-readBin(raw, integer(), n=1, endian="big")
+readBin(raw, integer(), n=1, endian="big");
+readBin(raw, integer(), n=1, endian="big");
+readBin(raw, integer(), n=1, endian="big");
+readBin(raw, integer(), n=1, endian="big");
 m = matrix(readBin(raw, integer(), size=1, n=28^2, endian="big"), nrow = 28, ncol = 28)
-image(m)
-
-```
-```{r}
+images <- data.frame()
+pixels <- 28
 par(mfrow=c(4,4))
 par(mar=c(0,0,0,0))
-for(i in 1:16){
+for(i in 1:60){
   m = matrix(readBin(raw,integer(), size=1, n=28*28, endian="big"),28,28);
-  image(m[,28:1])
+  image(m[,pixels:1], col = grey(seq(0,1, length=256)))
+  images <- rbind(images, m)
 }
 close(raw)
 ```
 
 ```{r}
+plot(images[1,])
+```
+
+```{r}
+#Bin the numbers
+zeroes <- train.data[train.data$labels == 0,]
+ones <- train.data[train.data$labels == 1,]
+twos <- train.data[train.data$labels == 2,]
+threes <- train.data[train.data$labels == 3,]
+fours <- train.data[train.data$labels == 4,]
+fives <- train.data[train.data$labels == 5,]
+sixes <- train.data[train.data$labels == 6,]
+
+
+sevens <- train.data[train.data$labels == 7,]
+eights <- train.data[train.data$labels == 8,]
+nines <- train.data[train.data$labels == 9,]
+
+
+#Remove Labels
+zeroes$labels <- NULL
+ones$labels   <- NULL
+twos$labels   <- NULL
+threes$labels <- NULL
+fours$labels  <- NULL
+fives$labels  <- NULL
+sixes$labels  <- NULL
+sevens$labels <- NULL
+eights$labels <- NULL
+nines$labels  <- NULL
+
+numbers <- c(zeroes, ones, twos, threes, fours, fives, sixes, sevens, eights, nines)
+
+```
+
+
+```{r}
+eig.values  <- (processed.data$sdev^2)[1:200]
+eig.vectors <- (processed.data$rotation)[,1:200]
+scores      <- (processed.data$x)[,1:200]
+plot(1:200, eig.values[1:200], type="o", log = "y", main="Magnitude of the 200 biggest eigenvalues", xlab="Eigenvalue #", ylab="Magnitude")
+plot(1-deviations, main = 'Percent Variance Explained')
+
+model <- train.images %*% eig.vectors
+```
+```{r}
+mtx.decomposed <- svd(train.data[-labels])
+```
+
+```{r, eval = F, echo = T}
+sing.0 <- svd(zeroes)$d
+sing.1 <- svd(ones)$d
+sing.2 <- svd(twos)$d
+sing.3 <- svd(threes)$d
+sing.4 <- svd(fours)$d
+sing.5 <- svd(fives)$d
+sing.6 <- svd(sixes)$d
+sing.7 <- svd(sevens)$d
+sing.8 <- svd(eights)$d
+sing.9 <- svd(nines)$d
+```
+
+```{r}
+singular.values <- as.data.frame(rbind(sing.0, sing.1, sing.2, sing.3, sing.4, sing.5, sing.6, sing.7, sing.8, sing.9))
+```
+
+
+```{r}
+sevens[1]
+decomposed.mtx <- svd(sevens[1])
+```
+
+
+
+```{r}
+k = 400
 S <- decomposed.mtx$d
-S <- diag(S)
-U <- as.matrix(decomposed.mtx$u)
-V <- as.matrix(decomposed.mtx$v)
+S <- diag(S[1:k])
+U <- as.matrix(decomposed.mtx$u)[,1:k]
+V <- as.matrix(decomposed.mtx$v)[,1:k]
+```
+
+```{r}
+compressed.test <- (U %*% S) %*% t(V)
+image(compressed.test)
+```
+
+```{r}
+train.data$labels <- NULL
+this.test$labels <- NULL
+```
+
+
+
+
+```{r}
+X = U %*% S %*% V %*% as.matrix(train.data)
+x = U %*% S %*% V %*% this.test
 
 ```
 
 ```{r}
-A <- test.images
-
-decomposed.mtx <- svd(A)
-dim(diag(decomposed.mtx$d))
-dim(decomposed.mtx$v)
-dim(decomposed.mtx$u)
+dim(X)
+dim(x)
+D <- X-x*rep(1, 784)
 ```
+
+
+
 ```{r, eval = F, echo = F}
 variance <- .99
-k = 100
+k = 400
 
 #while (sum(S[1:k])/sum(S) < variance){
 # k = k + 1 
@@ -69,26 +183,17 @@ k = 100
 k
 ```
 
+
 ```{r}
-table(train.labels)
-zeroes <- train.images[train.labels==0]
-ones <- train.labels[train.labels==1]
-twos <- train.labels[train.labels==2]
-threes <- train.labels[train.labels==3]
-fours <- train.labels[train.labels==4]
-fives <- train.labels[train.labels==5]
-sixes <- train.labels[train.labels==6]
-sevens <- train.labels[train.labels==7]
-eights <- train.labels[train.labels==8]
-nines <- train.labels[train.labels==9]
-
-numbers <- c(zeroes, ones, twos, threes, fours, fives, sixes, sevens, eights, nines)
-
-
-#for (i in 1:10){
-#  singular.values[i,] <- diag(svd(numbers[i])$d[1:k])
-#}
+U <- U[,1:k]
+dim( as.matrix(train.images[,-1]))
+dim(U)
+reduced.data <- train.images[,-1] %*% U
 ```
+
+
+
+
 
 ```{r}
 #S <- S[1:k,]fRe
@@ -105,7 +210,6 @@ dim(V)
 
 ```{r}
 product <- (U %*% S %*% (V))
-dim(product)
 X <- product %*% A
 q <- test[1,]
 x <- product * q
@@ -117,4 +221,44 @@ D
 
 
 
+```{r}
+A <- test.images
+
+decomposed.mtx <- svd(A)
+dim(diag(decomposed.mtx$d))
+dim(decomposed.mtx$v)
+dim(decomposed.mtx$u)
+```
+
+
+# Eigen Digits
+
+```{r}
+for(i in 1:3){
+this <- svd.list[-label]
+mtx <- matrix(as.numeric(this[[i]]$v), nrow = 28, ncol = 28)
+lmtx <- apply((lmtx),2, rev)
+image(lmtx, col = grey(seq(0,1, length=256)))
+
+rmtx <- matrix(as.numeric(this[[i]]$u), nrow = 28, ncol = 28)
+rmtx <- apply((mtx),2, rev)
+image(rmtx, col = grey(seq(0,1, length=256)))
+print(i)
+}
+```
+
+```{r}
+k = 200 #Good enough, reduced from 784 dimensions
+processed.data <- prcomp(train)
+deviations <- processed.data$sdev^2 / sum(processed.data$sdev^2)
+eig.values  <- (processed.data$sdev^2)[1:k]
+eig.vectors <- (processed.data$rotation)[,1:k]
+scores      <- (processed.data$x)[,1:k]
+plot(1:k, eig.values[1:k], type="o", log = "y", main="Magnitude of the 200 biggest eigenvalues", xlab="Eigenvalue #", ylab="Magnitude")
+```
+
+```{r}
+
+plot(1-deviations, main = 'Percent Variance Explained')
+```
 
