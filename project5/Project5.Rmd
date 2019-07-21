@@ -2,11 +2,9 @@
 title: "Project 5"
 output: 
   html_notebook:
-    code_folding: hide
     df_print: paged
     number_sections: yes
     toc: yes
-    toc_depth: 6
     toc_float: yes
 ---
 
@@ -24,6 +22,7 @@ knitr::opts_chunk$set(eval=T, echo=TRUE, warning=FALSE, cache = TRUE)
 [Source](https://courses.media.mit.edu/2004fall/mas622j/04.projects/faces/)
 
 The data comes from MIT and treats each image as a vector. I had to clean the data by removing the known bad rows.
+
 
 ```{r, eval=T, echo=T, warning=F, message=F}
 faces <- read.csv("../faces/faceR", sep = " ", header = F)
@@ -80,67 +79,21 @@ test <- predict(processed, test)
 
 I then used another factorization technique, called linear discriminant analysis, to build the model. LDA maximizes the difference between classes by acting on the component space defined above.
  
+
+Instead of spark, I will use a local cluster for this analysis. I have 8 cores, so I'm making 8 clusters. Further gains would need a specific type of cloud architecture and highly-optimized spark code. However, on the order of 10s of Gigabytes, doing these calculations on a bigger, distribute cluster (like Spark), becomes useful.
+
+```{r }
+library(doParallel)
+cl <- makePSOCKcluster(8)
+registerDoParallel(cl)
+```
+
 ```{r}
 model1 <- train(cleaned, train.labels, method = "lda", metric = "Accuracy", trace = FALSE)
 model1$results
 ```
  I was able to get an accuracy of 82% in a run-time of a few seconds by using the linear algebra techniques. It's scary how trivial this is.
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- #########################################################################################################################################
- 
-```{r}
-train <- as(object = train, "realRatingMatrix")
-test <- as(object = test, "realRatingMatrix")
-model1 <- Recommender(train, method = "SVD")
-recommendations1 <- predict(model1, test)
-
-
-pred1 <- calcPredictionAccuracy(recommendations1, test, given= 2103,  goodRating=.6)
-pred1
-```
-
-
-##  Centering and Scaling
 
 
 
 
-
-
-```{r}
-
-library(recommenderlab)
-train <- as(train, "realRatingMatrix")
-test  <- as(test,  "realRatingMatrix")
-model1 <- Recommender(train, method = "UBCF", 
-                     parameter = list(method = "cosine"))
-recommendations1 <- predict(model1, test)
-pred1 <- calcPredictionAccuracy(recommendations1, test))
-```
